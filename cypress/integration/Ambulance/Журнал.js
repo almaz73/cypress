@@ -1,4 +1,4 @@
-let site = '192.168.83.53:4080'
+let site = '192.168.83.53:8080'
 
 Cypress.on('uncaught:exception', (err, runnable) => { // чтобы тест не падал на неожиданных ошибках
     return false
@@ -7,7 +7,7 @@ Cypress.on('uncaught:exception', (err, runnable) => { // чтобы тест н�
 let token = '';
 Cypress.Cookies.defaults({ preserve: ['JSESSIONID', '790C8CFCE06CF045C926E7785996A800'] }); // борьба против повторных авторизаций
 
-describe('Поиск в журнале', function () {
+describe('Фильтрация в журнале', function () {
     beforeEach(function () {
         cy.viewport(1280, 720);
         cy.getCookie('JSESSIONID').then(cook => {
@@ -30,7 +30,7 @@ describe('Поиск в журнале', function () {
 
     })
 
-    it('- завершенные вызовы', function () {
+    it(': завершенные вызовы', function () {
         if (!Cypress.$('#headerNavbar').length) {
             cy.clearCookie(''); // чистим старый токен
             cy.wait(1000).then(() => window.location.reload());
@@ -44,7 +44,7 @@ describe('Поиск в журнале', function () {
                     cy.get('#filter-search').type('завершен')
 
                     cy.get('[title="Сведения об обслуживании"] > :nth-child(4) > .ivh-treeview > :nth-child(23) > .ivh-treeview-node-content > .ivh-treeview-checkbox-wrapper > span > .ivh-treeview-checkbox').click()
-                    
+
                     cy.get('[ng-model="ctrl.filters.completed"]').click()
 
                     cy.get('[ng-model="ctrl.filters.completed"]').contains('Да').click()
@@ -55,7 +55,7 @@ describe('Поиск в журнале', function () {
 
     })
 
-    it('- вызовы с пациентом по фамилии Петров', function () {
+    it(': вызовы с пациентом по фамилии Петров', function () {
         cy.contains('Добавить фильтр ').then(el => {
             cy.get(el).click({ force: true })
                 .then((res) => {
@@ -75,5 +75,20 @@ describe('Поиск в журнале', function () {
                 })
         })
 
+    })
+
+    it(': вызовы за последнюю неделю', function () {
+
+        cy.get('[ng-model="ctrl.filters.periodStart"]').invoke('val').then((text) => {
+            text = text.split('.').reverse().join('-')
+            let oldDate = new Date(text);
+            let newDate = oldDate.setDate(oldDate.getDate() - 7)
+
+            cy.get('[ng-model="ctrl.filters.periodStart"]')
+                .clear()
+                .type(`${new Date(newDate).toLocaleDateString()}{enter}`)
+
+            cy.get('[ng-click="find(ctrl.filters);"]').click()
+        });
     })
 })
