@@ -13,19 +13,6 @@ describe('Доступность сайтов', () => {
 
     ].forEach(element => {
         it(element.name, () => {
-            /*var ImageObject = new Image();
-            ImageObject.src = "http://" + element.link + "/ambulance/resources/img/systemL.png?cachebreaker="+new Date().getTime();
-            
-            if (ImageObject.height > 0) {
-                cy.log("Ping worked!");
-            } else {
-                cy.log("Ping failed :(");
-            }*/
-
-            // старый медленный подход
-            /*cy.visit('http://' + element.link + '/ambulance/login')
-                .title().should('eq', 'Вход в систему')*/ 
-
             cy.request('http://' + element.link + '/ambulance/login')
                 .its('body')
                 .should('include', '<title>')

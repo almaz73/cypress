@@ -30,13 +30,17 @@ describe('Фильтрация в журнале', function () {
 
     })
 
-    it(': завершенные вызовы', function () {
+    beforeEach(function () {
         if (!Cypress.$('#headerNavbar').length) {
             cy.clearCookie(''); // чистим старый токен
             cy.wait(1000).then(() => window.location.reload());
             console.log('- - - - - - - - - -почистили авторизацию, обновляемся- - - - - - - - - - - ',);
             return;
         }
+    })
+
+    it(': завершенные вызовы', function () {
+       
 
         cy.contains('Добавить фильтр ').then(el => {
             cy.get(el).click({ force: true })

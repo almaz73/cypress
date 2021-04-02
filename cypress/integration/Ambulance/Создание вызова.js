@@ -7,7 +7,7 @@ Cypress.on('uncaught:exception', () => false); // чтобы тест не па�
 
 Cypress.Cookies.defaults({ preserve: ['JSESSIONID', 'C9AB6D5557F3BDF397301269069FB649'] }); // борьба против повторных авторизаций
 
-describe('Создание вызова 8080', function () {
+describe('Создание вызова для '+site, function () {
     beforeEach(function () {
         cy.viewport(1280, 720);
         cy.getCookie('JSESSIONID').then(cook => {
