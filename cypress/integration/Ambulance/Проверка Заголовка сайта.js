@@ -5,7 +5,7 @@ Cypress.on('uncaught:exception', () => false); // чтобы тест не па�
 
 Cypress.Cookies.defaults({ preserve: ['JSESSIONID', 'C9AB6D5557F3BDF397301269069FB649'] }); // борьба против повторных авторизаций
 
-describe('Создание вызова 8080', function () {
+describe('Проверка наличия всех элементов заголовка', function () {
     beforeEach(function () {
         cy.viewport(1280, 720);
         cy.getCookie('JSESSIONID').then(cook => {
@@ -78,12 +78,36 @@ describe('Создание вызова 8080', function () {
         cy.wait(500);
         cy.get('[ng-click="getNetPing()"]').click()
             .then(modal => {
-                //cy.get('.modal-window > .header > :nth-child(2) > .close-button').click()
                 cy.get('.modal-window > .header > .close-button').click()
             })
     })
 
+    it('Наличие ссылки на документацию', function () {
+        cy.wait(500);
+        cy.visit(`http://${site}/ambulance/docs/index.html`)
+        cy.get('.close')
+    })
 
+
+    it('Наличие кнопки сброс кэша сервера', function () {
+        cy.wait(500);
+        cy.get('debug-panel').find('.clear-cache-btn')
+    })
+
+    it('Наличие Выбранной конфигурации АРМ', function () {
+        cy.wait(500);
+        cy.get('[title="Выбранная конфигурация АРМ"]').find('.caret')
+    })
+
+    it('Наличие Логина', function () {
+        cy.wait(500);
+        cy.get('[title="Логин"]').find('.glyphicon')
+    })
+
+
+
+
+   
 
 
 
