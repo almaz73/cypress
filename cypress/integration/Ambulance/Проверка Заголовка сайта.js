@@ -1,4 +1,3 @@
-let site = "192.168.83.53:7080"
 let token;
 
 Cypress.on('uncaught:exception', () => false); // чтобы тест не падал на неожиданных ошибках
@@ -11,9 +10,9 @@ describe('Проверка наличия всех элементов загол
         cy.getCookie('JSESSIONID').then(cook => {
             if (!cook || !cook.name) {
                 // Авторизация, если не авторизовано
-                cy.visit(`http://${site}/ambulance/login`)
-                cy.get('input[placeholder="Логин"]').type('adminSMP')
-                cy.get('input[placeholder="Пароль"]').type('ambulance17')
+                cy.visit(`http://${Cypress.env('url')}/ambulance/login`)
+                cy.get('input[placeholder="Логин"]').type(Cypress.env('login'))
+                cy.get('input[placeholder="Пароль"]').type(Cypress.env('password'))
                 cy.contains('Войти').click()
                 cy.title().should('eq', 'СМП 3.0')
 
@@ -24,7 +23,7 @@ describe('Проверка наличия всех элементов загол
             }
 
             cy.wait(300);
-            cy.visit('http://' + site + '/ambulance/#/operinfo/')
+            cy.visit('http://' + Cypress.env('url') + '/ambulance/#/operinfo/')
         })
     })
     beforeEach(function () {
@@ -84,7 +83,7 @@ describe('Проверка наличия всех элементов загол
 
     it('Наличие ссылки на документацию', function () {
         cy.wait(500);
-        cy.visit(`http://${site}/ambulance/docs/index.html`)
+        cy.visit(`http://${Cypress.env('url')}/ambulance/docs/index.html`)
         cy.get('.close')
     })
 

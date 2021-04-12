@@ -1,5 +1,3 @@
-let site = '192.168.83.53:8080'
-
 Cypress.on('uncaught:exception', (err, runnable) => { // чтобы тест не падал на неожиданных ошибках
     return false
 })
@@ -13,9 +11,9 @@ describe('Фильтрация в журнале', function () {
         cy.getCookie('JSESSIONID').then(cook => {
             if (!cook || !cook.name) {
                 // Авторизация, если не авторизовано
-                cy.visit(`http://${site}/ambulance/login`)
-                cy.get('input[placeholder="Логин"]').type('adminSMP')
-                cy.get('input[placeholder="Пароль"]').type('ambulance17')
+                cy.visit(`http://${Cypress.env('url')}/ambulance/login`)
+                cy.get('input[placeholder="Логин"]').type(Cypress.env('login'))
+                cy.get('input[placeholder="Пароль"]').type(Cypress.env('password'))
                 cy.contains('Войти').click()
                 cy.title().should('eq', 'СМП 3.0')
 
@@ -25,7 +23,7 @@ describe('Фильтрация в журнале', function () {
                 })
             }
 
-            cy.visit('http://' + site + '/ambulance/#/journal')
+            cy.visit('http://' + Cypress.env('url') + '/ambulance/#/journal')
         })
 
     })

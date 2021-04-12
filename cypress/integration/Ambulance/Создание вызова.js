@@ -1,21 +1,20 @@
 //const { get } = require("http");
 
-let site = "192.168.83.53:7080" 
 let token;
 
 Cypress.on('uncaught:exception', () => false); // чтобы тест не падал на неожиданных ошибках
 
 Cypress.Cookies.defaults({ preserve: ['JSESSIONID', 'C9AB6D5557F3BDF397301269069FB649'] }); // борьба против повторных авторизаций
 
-describe('Создание вызова для '+site, function () {
+describe('Создание вызова для '+Cypress.env('url'), function () {
     beforeEach(function () {
         cy.viewport(1280, 720);
         cy.getCookie('JSESSIONID').then(cook => {
             if (!cook || !cook.name) {
                 // Авторизация, если не авторизовано
-                cy.visit(`http://${site}/ambulance/login`)
-                cy.get('input[placeholder="Логин"]').type('adminSMP')
-                cy.get('input[placeholder="Пароль"]').type('ambulance17')
+                cy.visit(`http://${Cypress.env('url')}/ambulance/login`)
+                cy.get('input[placeholder="Логин"]').type(Cypress.env('login'))
+                cy.get('input[placeholder="Пароль"]').type(Cypress.env('password'))
                 cy.contains('Войти').click()
                 cy.title().should('eq', 'СМП 3.0')
 
@@ -26,7 +25,7 @@ describe('Создание вызова для '+site, function () {
             }
 
             cy.wait(300);
-            cy.visit('http://' + site + '/ambulance/#/callcard/')
+            cy.visit('http://' + Cypress.env('url') + '/ambulance/#/callcard/')
         })
     })
     beforeEach(function () {

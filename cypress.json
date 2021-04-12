@@ -1,3 +1,14 @@
 {
-    "projectId": "wr27mv"
-}
+    "projectId": "wr27mv",
+
+    "retries": {
+      "runMode": 1,
+      "openMode": 0
+    },
+
+    "env": {
+        "login":"adminSMP",
+        "password":"ambulance17",
+        "url":"192.168.83.53:8080"
+    }
+  }
